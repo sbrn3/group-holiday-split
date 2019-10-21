@@ -64,6 +64,9 @@ should bid $79 on room 1 and $21 on room 2. Slightly losing the bid for room 1 a
 
 You are probably better off just bidding normally instead of trying to game the system.  
 
+### Even split 
+Some people will claim that this is too complicated and that you should just split the costs evenly between everyone. And whoever ends up in whichever room doesn't matter. It's a holiday after all. Well if that is the case then these people can bid on every room evenly beacuse they believe all the rooms have equal value. The reality is though, most rational people will realise pretty quickly that the rooms are probably not of equal value. So... they will then decide to bid based on how they actually feel. The benefit of this is that if you just split the costs evenly the winners will be the best arguers. 
+
 # How to use
 main.py is an example where 10 people were sorted into 4 rooms. There is a couple and people who are staying for 
 different time periods. 
