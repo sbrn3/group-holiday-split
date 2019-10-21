@@ -24,7 +24,8 @@ The combination of assigning people to rooms which results in the highest total 
 
 e.g. If Sam bids $100 for room 1, $50 for room 2. And Michael bids $50 for room 1 and $100 for room 2. Then in the case 
 where Sam gets room 1 and Michael room 2 the total amount bid is $200. But for the inverse the total amount bid is 
-$100. Therefore the best option is for Sam to get room 1 and Michael to get Room 2.
+$100. Therefore the best option is for Sam to get room 1 and Michael to get Room 2. This is then scaled down to have 
+a correct total. So both would end up paying $75 each.
 
 The person who bids the highest on a room is most likely to get that room. If you bid more than other people, then you
 will only have to pay the average that people valued that room. 
@@ -36,13 +37,14 @@ unless they are a couple.
 
 ### Picking a value
 If you bid too high you will pay too much for that room. If you bid too low you will not get the room. 
-The amount that you should bid should determine how much you value the features of that room. For example it may be 
-really important to you that you get a nice bed but for another person it is more important to get a nice view. So you
-would each bid more on different rooms. 
+The amount that you should bid should determine how much you value the features of that room. Remember everyone probably
+has different priorities. Some people may prefer having nice views, having an en suite, bigger bed. Therefore you can
+price each of those things based on how important it is to you. 
 
 ### Sharing a room with a friend
 If you want to share a room with a friend then you have to bid more on the room you want to share. Hopefully you will 
-win that auction and both be assigned to that room. 
+win that auction and both be assigned to that room. In this case you may wish to collude and enter the same price bid. 
+Therefore if you win you both win, and if you lose you both lose. So not just one person gets the room. 
 
 ### Staying fewer than the maximum nights
 If you are not there for all the nights you will be disadvantaged because you are paying less by not staying. Because 
@@ -50,3 +52,14 @@ this gives the best rooms to the people who pay the most you will probably not g
 is to have the total of your bids be more than the price of the house per night. This means that you are willing to 
 pay for more than you are actually staying. Of course you are then subsidizing everyone else's stay, but if you are 
 willing to pay to leave a good room empty, then it is up to you. 
+
+### Playing it cheap
+So what if you don't care where you sleep as long as you get the absolute cheapest option? Well you have to value 
+the popular rooms lower than everyone else (so that you don't win them) but that means that you will have to increase 
+your value on a lower popularity rule to have the correct total cost across rooms. Actually the cheapest way is to 
+bid as high as possible on the popular rooms but to only slightly lose. 
+
+e.g. If Sam wants to have a really cheep room. Therefore if Michael bids $100 on room 1 and $50 on room 2, then Sam 
+should bid $99 on room 1 and $51 on room 2. Slightly losing the bid for room 1. 
+
+You are probably better off just bidding normally instead of trying to game the system.  

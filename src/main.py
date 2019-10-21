@@ -1,6 +1,5 @@
 from typing import List, Dict
-from itertools import
-
+from itertools import product
 
 
 class Person(object):
@@ -48,6 +47,15 @@ class Person(object):
     def add_bids(self, bids: Dict[str, float]):
         """Add bids to a person"""
         self._bids = bids
+
+    def is_couple(self, other_person):
+        """Is the other person, this person's partner.
+
+        Are they a couple? """
+        if self.get_partner() == other_person:
+            return True
+        else:
+            return False
 
     def __repr__(self):
         return self._name
@@ -125,6 +133,19 @@ class Room:
         """The people in the room"""
         return self.people
 
+    def is_gender_restricted(self):
+        """Whether this room is gender restricted
+
+        Essentially whether it has a double bed or not"""
+        for bed in self._beds:
+            if bed.get_type() == "double":
+                return True
+        return False
+
+    def get_name(self):
+        """Name of the room"""
+        return self._name
+
     def __repr__(self):
         return self._name
 
@@ -169,7 +190,8 @@ class Calculator(object):
     def __init__(self):
         """Calculate the best permutation of bed/room assignments. And the prices that everyone has to pay for them"""
         self._people: list = []
-        self._highest_utility: int = None
+        self._highest_utility: int = 0
+        self.best_arrangements: List[List[int]] = []
 
     def get_house(self):
         """"Returns house"""
@@ -201,15 +223,85 @@ class Calculator(object):
         In the form of a dictionary which maps {person: room} """
         answer: Dict[Person: Room] = {}
 
-        # Iterate over every possible permutations of room assignment
-        rooms_with_space: List[Room] = self._house.get_rooms()
-        people: List[Person] = self.get_people()
-        possible_arrangements: List[List[int]] = self.calculate_arrangements(people)
+        # Get a list of all possible ways people could be put in rooms
+        possible_arrangements: List[tuple] = self.calculate_arrangements()
 
-    def calculate_arrangements(self,people: List[Person]):
+        count = 0
+        total = len(possible_arrangements)
+        # Calculate the utility of every arrangement
+        for arrangement in possible_arrangements:
+            count += 1
+            arrangement = list(arrangement)
+            if self.is_valid_arrangement(arrangement):
+                utility = self.calculate_utility(arrangement)
+                print(round(count/total, 2))
+                if utility >= self._highest_utility:
+                    self._highest_utility = utility
+                    self.best_arrangements.append(arrangement)
+
+    def get_best_arrangement(self):
+        """Returns best arrangement"""
+        return self.best_arrangements
+
+    def calculate_arrangements(self):
         """Calculates a list of lists which map people to rooms"""
+        x = list(product(range(1, len(self._house.get_rooms()) + 1), repeat=len(self.get_people())))
+        return x
 
+    def indexed_people(self, n: int, arrangement: List[int]) -> List[Person]:
+        """People at indexes"""
+        indexes: List[int] = []
+        # People indexed to room n
+        for i in range(len(arrangement)):
+            if n == arrangement[i]:
+                indexes.append(i)
+        indexed_people: List[Person] = []
+        for i in indexes:
+            indexed_people.append(self.get_people()[i])
+        return indexed_people
 
+    def is_valid_arrangement(self, room_indexes: List[int]):
+        """Bool of whether the tuple is a valid arrangement for rooms"""
+        rooms: List[Room] = self._house.get_rooms()
+        for room in range(len(rooms)):
+            # Are any of the rooms too full
+            assigned_to_room = room_indexes.count(room + 1)
+            space_in_room = rooms[room].get_capacity()
+            if assigned_to_room > space_in_room:
+                return False
+
+            # Have less than 2 people been assigned to the room
+            if assigned_to_room < 2:
+                continue
+            # Is this a gender restricted room
+            if rooms[room].is_gender_restricted():
+                # Find the people assigned to this room
+                indexed_people = self.indexed_people(room + 1, room_indexes)
+
+                # Are they a couple?
+                if indexed_people[0].is_couple(indexed_people[1]):
+                    continue
+
+                # Are the genders all the same
+                if indexed_people[0].get_gender() != indexed_people[1].get_gender():
+                    return False
+        return True
+
+    def calculate_utility(self, arrangement: List[int]):
+        utility_score: float = 0
+        # For every person
+        for person in self.get_people():
+            # Find out what room they were put in
+            arrangement_index: int = self.get_people().index(person)
+            room_index = arrangement[arrangement_index] - 1
+            room: Room = self._house.get_rooms()[room_index]
+            room_name: str = room.get_name()
+            # How much did they bid on that room
+            bid: int = person.get_bids()[room_name]
+            bid *= person.days_staying()
+            # Add to the total utility score
+            utility_score += bid
+        return utility_score
 
 
 if __name__ == '__main__':
@@ -249,10 +341,10 @@ if __name__ == '__main__':
     sarah = Person("sarah", "f", 1)
 
     # Add rooms to the house
-    the_house.add_room(bunk_room)
-    the_house.add_room(twin_room)
-    the_house.add_room(queen_room)
     the_house.add_room(king_room)
+    the_house.add_room(queen_room)
+    the_house.add_room(twin_room)
+    the_house.add_room(bunk_room)
 
     # Add house to calculator
     test.add_house(the_house)
@@ -265,35 +357,34 @@ if __name__ == '__main__':
 
     # Add bids to a person
     lewis.add_bids({
-        "bunk room": 10,
+        "bunk room": 0,
         "twin room": 30,
         "queen room": 20,
-        "king room": 40
+        "king room": 50
     })
-    lewis.get_bids()
     braydon.add_bids({
-        "bunk room": 10,
-        "twin room": 30,
+        "bunk room": 0,
+        "twin room": 40,
         "queen room": 20,
         "king room": 40
     })
     tim.add_bids({
         "bunk room": 10,
-        "twin room": 30,
+        "twin room": 10,
         "queen room": 20,
-        "king room": 40
+        "king room": 60
     })
     jess.add_bids({
-        "bunk room": 10,
+        "bunk room": 5,
         "twin room": 30,
-        "queen room": 20,
+        "queen room": 25,
         "king room": 40
     })
     daniel.add_bids({
-        "bunk room": 10,
-        "twin room": 30,
+        "bunk room": 20,
+        "twin room": 10,
         "queen room": 20,
-        "king room": 40
+        "king room": 50
     })
     emma.add_bids({
         "bunk room": 10,
@@ -314,14 +405,17 @@ if __name__ == '__main__':
         "king room": 40
     })
     michael.add_bids({
-        "bunk room": 10,
-        "twin room": 30,
+        "bunk room": 20,
+        "twin room": 50,
         "queen room": 20,
-        "king room": 40
+        "king room": 10
     })
     sarah.add_bids({
         "bunk room": 10,
         "twin room": 30,
-        "queen room": 20,
-        "king room": 40
+        "queen room": 50,
+        "king room": 10
     })
+    test.calculate()
+    print(test.best_arrangements)
+    print(len(test.best_arrangements))
