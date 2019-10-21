@@ -22,10 +22,10 @@ demand.
 
 The combination of assigning people to rooms which results in the highest total bids will be the chosen combination. 
 
-e.g. If Sam bids $100 for room 1, $50 for room 2. And Michael bids $50 for room 1 and $100 for room 2. Then in the case 
-where Sam gets room 1 and Michael room 2 the total amount bid is $200. But for the inverse the total amount bid is 
-$100. Therefore the best option is for Sam to get room 1 and Michael to get Room 2. This is then scaled down to have 
-a correct total. So both would end up paying $75 each.
+e.g. If Sam bids $80 for room 1, $20 for room 2. And Michael bids $20 for room 1 and $80 for room 2. Then in the case 
+where Sam gets room 1 and Michael room 2 the total amount bid is 180. But for the inverse the total amount bid is 
+$40. Therefore the best option is for Sam to get room 1 and Michael to get Room 2. This is then scaled down to have 
+a correct total. So both would end up paying $50 each.
 
 The person who bids the highest on a room is most likely to get that room. If you bid more than other people, then you
 will only have to pay the average that people valued that room. 
@@ -59,7 +59,7 @@ the popular rooms lower than everyone else (so that you don't win them) but that
 your value on a lower popularity rule to have the correct total cost across rooms. Actually the cheapest way is to 
 bid as high as possible on the popular rooms but to only slightly lose. 
 
-e.g. If Sam wants to have a really cheep room. Therefore if Michael bids $100 on room 1 and $50 on room 2, then Sam 
-should bid $99 on room 1 and $51 on room 2. Slightly losing the bid for room 1. 
+e.g. If Sam wants to have a really cheep room. Therefore if Michael bids $80 on room 1 and $20 on room 2, then Sam 
+should bid $79 on room 1 and $21 on room 2. Slightly losing the bid for room 1 and thus securing a low bid for room 2. 
 
 You are probably better off just bidding normally instead of trying to game the system.  
