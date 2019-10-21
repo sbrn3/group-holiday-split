@@ -1,4 +1,6 @@
 from typing import List, Dict
+from itertools import
+
 
 
 class Person(object):
@@ -206,10 +208,7 @@ class Calculator(object):
 
     def calculate_arrangements(self,people: List[Person]):
         """Calculates a list of lists which map people to rooms"""
-        person_1 = people[0]
-        room_1 = rooms[0]
-        was_added = room_1.add_person(person_1)
-        if was_added:
+
 
 
 
