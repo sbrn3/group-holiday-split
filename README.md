@@ -16,7 +16,7 @@ demand.
 
 1. Bid a price per night that you would pay to have a bed in a particular room
 
-2. The total of your bids must be equal to (or more than) the cost per night for the entire house
+2. The total of your bids must be equal to (or more than) 100. Would be too hard doing the math otherwise. 
 
 # Result
 
