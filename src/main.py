@@ -1,47 +1,13 @@
 from typing import List, Dict
 
 
-class Bed:
-    """A bed in the house. Can be double or single"""
-
-    def __init__(self, name: str, size: str):
-        """A bed in the house. Can be double or single"""
-        self._name = name
-        self._size = size
-        if self._size == "single":
-            self._spaces = 1
-        elif self._size == "double":
-            self._spaces = 2
-        else:
-            raise IOError
-
-    def get_size(self):
-        """type of bed"""
-        return self._size
-
-    def get_spaces(self):
-        """number of people that can sleep in this bed"""
-        return self._spaces
-
-
-class Room:
-    """A room with beds of the same type in it"""
-
-    def __init__(self, name: str, beds: List[Bed]):
-        """Has beds in it"""
-        self._name = name
-        self._beds = beds
-
-    def add_bed(self, bed: Bed):
-        """Add a bed to a room"""
-        self._beds.append(bed)
-
-
 class Person(object):
     """A person that is going on the trip"""
+    _name: str
 
     def __init__(self, name: str, gender: str, days_staying: int):
         """A person that will be there during the holiday
+        :type name: str
         :param name: Name of person
         :param gender: Gender of person ('m' or 'f')
         :param days_staying: Number of nights the person is staying
@@ -70,7 +36,7 @@ class Person(object):
 
     def add_partner(self, partner):
         """Add a partner to a person"""
-        self.partner : Person = partner
+        self.partner: Person = partner
         partner.partner = self
 
     def get_bids(self):
@@ -79,7 +45,86 @@ class Person(object):
 
     def add_bids(self, bids: Dict[str, float]):
         """Add bids to a person"""
-        self._bids =
+        self._bids = bids
+
+    def __repr__(self):
+        return self._name
+
+
+class Bed:
+    """A bed in the house. Can be double or single"""
+
+    def __init__(self, name: str, size: str):
+        """A bed in the house. Can be double or single"""
+        self._name: str = name
+        self._size: str = size
+        if self._size == "single":
+            self._spaces: int = 1
+        elif self._size == "double":
+            self._spaces: int = 2
+        else:
+            raise IOError
+
+    def get_type(self):
+        """type of bed"""
+        return self._size
+
+    def get_spaces(self):
+        """number of people that can sleep in this bed"""
+        return self._spaces
+
+    def __repr__(self):
+        return self._name
+
+
+class Room:
+    """A room with beds of the same type in it"""
+
+    def __init__(self, name: str, beds: List[Bed]):
+        """Has beds in it"""
+        self._name = name
+        self._beds = beds
+        self.capacity: int = self.calculate_capacity()
+        self.people: List[Person] = []
+
+    def add_bed(self, bed: Bed):
+        """Add a bed to a room"""
+        self._beds.append(bed)
+
+    def calculate_capacity(self):
+        total = 0
+        for i in self._beds:
+            total += i.get_spaces()
+        return total
+
+    def get_capacity(self):
+        """Gets the number of people that can sleep in this room"""
+        return self.capacity
+
+    def add_person(self, person: Person) -> bool:
+        """Add a person to the room.
+
+        Will return false if the room is already full or there is no bed for someone of their gender in the room"""
+        # If there is space in the room
+        if self.get_capacity() <= len(self.get_people()):
+            return False
+        # If the bed is a double
+        if self._beds[0].get_type() == "double":
+            other_person = self.people[0]
+            if other_person.get_gender() != person.get_gender() and other_person.get_partner() != person:
+                return False
+        elif len(self.get_people()) < self.get_capacity():
+            self.people.append(person)
+            return True
+        else:
+            raise IOError
+
+    def get_people(self):
+        """The people in the room"""
+        return self.people
+
+    def __repr__(self):
+        return self._name
 
 
 class House:
@@ -117,10 +162,10 @@ class House:
 
 class Calculator(object):
     """Calculates the best permutation of bed selections"""
+    _house: House
 
     def __init__(self):
         """Calculate the best permutation of bed/room assignments. And the prices that everyone has to pay for them"""
-        self._house = None
         self._people: list = []
         self._highest_utility: int = None
 
@@ -147,6 +192,25 @@ class Calculator(object):
     def add_house(self, house: House):
         """Add a house to the calculator"""
         self._house = house
+
+    def calculate(self):
+        """Calculates the room assignment for every person in the house
+
+        In the form of a dictionary which maps {person: room} """
+        answer: Dict[Person: Room] = {}
+
+        # Iterate over every possible permutations of room assignment
+        rooms_with_space: List[Room] = self._house.get_rooms()
+        people: List[Person] = self.get_people()
+        possible_arrangements: List[List[int]] = self.calculate_arrangements(people)
+
+    def calculate_arrangements(self,people: List[Person]):
+        """Calculates a list of lists which map people to rooms"""
+        person_1 = people[0]
+        room_1 = rooms[0]
+        was_added = room_1.add_person(person_1)
+        if was_added:
+
 
 
 if __name__ == '__main__':
@@ -202,9 +266,63 @@ if __name__ == '__main__':
 
     # Add bids to a person
     lewis.add_bids({
-        "bunk room": 100,
-        "twin room": 150,
-        "queen room": 200,
-        "king room": 200
+        "bunk room": 10,
+        "twin room": 30,
+        "queen room": 20,
+        "king room": 40
     })
-
+    lewis.get_bids()
+    braydon.add_bids({
+        "bunk room": 10,
+        "twin room": 30,
+        "queen room": 20,
+        "king room": 40
+    })
+    tim.add_bids({
+        "bunk room": 10,
+        "twin room": 30,
+        "queen room": 20,
+        "king room": 40
+    })
+    jess.add_bids({
+        "bunk room": 10,
+        "twin room": 30,
+        "queen room": 20,
+        "king room": 40
+    })
+    daniel.add_bids({
+        "bunk room": 10,
+        "twin room": 30,
+        "queen room": 20,
+        "king room": 40
+    })
+    emma.add_bids({
+        "bunk room": 10,
+        "twin room": 30,
+        "queen room": 20,
+        "king room": 40
+    })
+    sam.add_bids({
+        "bunk room": 10,
+        "twin room": 30,
+        "queen room": 20,
+        "king room": 40
+    })
+    mel.add_bids({
+        "bunk room": 10,
+        "twin room": 30,
+        "queen room": 20,
+        "king room": 40
+    })
+    michael.add_bids({
+        "bunk room": 10,
+        "twin room": 30,
+        "queen room": 20,
+        "king room": 40
+    })
+    sarah.add_bids({
+        "bunk room": 10,
+        "twin room": 30,
+        "queen room": 20,
+        "king room": 40
+    })
