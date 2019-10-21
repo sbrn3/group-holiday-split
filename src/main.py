@@ -1,6 +1,6 @@
 from classes import *
 if __name__ == '__main__':
-    test = Calculator()
+    test = Calculator(couple_priority=True)
 
     # create all the beds
     bunk_1 = Bed("bunk 1", "single")
@@ -34,6 +34,8 @@ if __name__ == '__main__':
     mel = Person("mel", "f", 3)
     michael = Person("michael", "m", 2)
     sarah = Person("sarah", "f", 1)
+    # kaelyn = Person("kaelyn", "f", 3)
+    # nathan = Person("nathan", "m", 1)
 
     # Add rooms to the house
     the_house.add_room(king_room)
@@ -46,8 +48,11 @@ if __name__ == '__main__':
 
     # Add people to the calculator
     test.add_people([lewis, braydon, tim, jess, daniel, emma, sam, mel, michael, sarah])
+    # test.add_people([lewis, braydon, tim, jess, daniel, emma, sam, mel, michael, sarah, kaelyn, nathan])
+
 
     # Add partner to a person
+    # kaelyn.add_partner(jess)
     lewis.add_partner(jess)
 
     # Add bids to a person
@@ -111,6 +116,18 @@ if __name__ == '__main__':
         "queen room": 50,
         "king room": 10
     })
+    # kaelyn.add_bids({
+    #     "bunk room": 0,
+    #     "twin room": 0,
+    #     "queen room": 0,
+    #     "king room": 100
+    # })
+    # nathan.add_bids({
+    #     "bunk room": 0,
+    #     "twin room": 30,
+    #     "queen room": 20,
+    #     "king room": 50
+    # })
     test.calculate()
     print(test.best_arrangements)
     print(len(test.best_arrangements))

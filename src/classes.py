@@ -187,11 +187,12 @@ class Calculator(object):
     """Calculates the best permutation of bed selections"""
     _house: House
 
-    def __init__(self):
+    def __init__(self, couple_priority=False):
         """Calculate the best permutation of bed/room assignments. And the prices that everyone has to pay for them"""
         self._people: list = []
         self._highest_utility: int = 0
         self.best_arrangements: List[List[int]] = []
+        self.couple_priority = couple_priority
 
     def get_house(self):
         """"Returns house"""
@@ -234,7 +235,7 @@ class Calculator(object):
             arrangement = list(arrangement)
             if self.is_valid_arrangement(arrangement):
                 utility = self.calculate_utility(arrangement)
-                print(round(count/total, 2))
+                print(round(count / total, 2))
                 if utility >= self._highest_utility:
                     self._highest_utility = utility
                     self.best_arrangements.append(arrangement)
@@ -276,15 +277,26 @@ class Calculator(object):
             # Is this a gender restricted room
             if rooms[room].is_gender_restricted():
                 # Find the people assigned to this room
-                indexed_people = self.indexed_people(room + 1, room_indexes)
-
+                indexed_people: List[Person] = self.indexed_people(room + 1, room_indexes)
+                # Couple priority
+                if self.couple_priority:
+                    if indexed_people[0].get_partner() is not None:
+                        if not indexed_people[0].is_couple(indexed_people[1]):
+                            return False
                 # Are they a couple?
                 if indexed_people[0].is_couple(indexed_people[1]):
                     continue
-
                 # Are the genders all the same
                 if indexed_people[0].get_gender() != indexed_people[1].get_gender():
                     return False
+            else:
+                if self.couple_priority:
+                    # couples can only be in gender restricted rooms
+                    indexed_people: List[Person] = self.indexed_people(room + 1, room_indexes)
+                    for person in indexed_people:
+                        if person.get_partner() in indexed_people:
+                            return False
+
         return True
 
     def calculate_utility(self, arrangement: List[int]):

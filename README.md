@@ -63,3 +63,7 @@ e.g. If Sam wants to have a really cheep room. Therefore if Michael bids $80 on 
 should bid $79 on room 1 and $21 on room 2. Slightly losing the bid for room 1 and thus securing a low bid for room 2. 
 
 You are probably better off just bidding normally instead of trying to game the system.  
+
+# How to use
+main.py is an example where 10 people were sorted into 4 rooms. There is a couple and people who are staying for 
+different time periods. 
