@@ -57,64 +57,64 @@ if __name__ == '__main__':
 
     # Add bids to a person
     lewis.add_bids({
-        "bunk room": 0,
-        "twin room": 30,
-        "queen room": 20,
-        "king room": 50
+        "bunk room": 20,
+        "twin room": 20,
+        "queen room": 40,
+        "king room": 20
     })
     braydon.add_bids({
-        "bunk room": 0,
-        "twin room": 40,
-        "queen room": 20,
-        "king room": 40
+        "bunk room": 22,
+        "twin room": 24.5,
+        "queen room": 26,
+        "king room": 27.5
     })
     tim.add_bids({
-        "bunk room": 10,
-        "twin room": 10,
-        "queen room": 20,
-        "king room": 60
+        "bunk room": 100,
+        "twin room": 0,
+        "queen room": 0,
+        "king room": 0
     })
     jess.add_bids({
-        "bunk room": 5,
-        "twin room": 30,
-        "queen room": 25,
-        "king room": 40
+        "bunk room": 10,
+        "twin room": 10,
+        "queen room": 30,
+        "king room": 50
     })
     daniel.add_bids({
-        "bunk room": 20,
-        "twin room": 10,
-        "queen room": 20,
-        "king room": 50
+        "bunk room": 10,
+        "twin room": 30,
+        "queen room": 30,
+        "king room": 30
     })
     emma.add_bids({
         "bunk room": 10,
-        "twin room": 30,
-        "queen room": 20,
+        "twin room": 20,
+        "queen room": 30,
         "king room": 40
     })
     sam.add_bids({
         "bunk room": 10,
         "twin room": 30,
-        "queen room": 20,
-        "king room": 40
+        "queen room": 25,
+        "king room": 35
     })
     mel.add_bids({
-        "bunk room": 10,
-        "twin room": 30,
-        "queen room": 20,
-        "king room": 40
+        "bunk room": 25,
+        "twin room": 25,
+        "queen room": 25,
+        "king room": 25
     })
     michael.add_bids({
-        "bunk room": 20,
-        "twin room": 50,
-        "queen room": 20,
-        "king room": 10
+        "bunk room": 1,
+        "twin room": 9,
+        "queen room": 45,
+        "king room": 45
     })
     sarah.add_bids({
         "bunk room": 10,
-        "twin room": 30,
-        "queen room": 50,
-        "king room": 10
+        "twin room": 40,
+        "queen room": 30,
+        "king room": 20
     })
     # kaelyn.add_bids({
     #     "bunk room": 0,
