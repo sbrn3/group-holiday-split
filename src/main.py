@@ -1,6 +1,6 @@
 from classes import *
 if __name__ == '__main__':
-    test = Calculator(couple_priority=True)
+    test = Calculator(couple_force=False, couple_priority=True)
 
     # create all the beds
     bunk_1 = Bed("bunk 1", "single")
@@ -23,6 +23,15 @@ if __name__ == '__main__':
     # Create the house
     the_house = House(547, 3)
 
+    # Add rooms to the house
+    the_house.add_room(king_room)
+    the_house.add_room(queen_room)
+    the_house.add_room(twin_room)
+    the_house.add_room(bunk_room)
+
+    # Add house to calculator
+    test.add_house(the_house)
+
     # Create the people and their bids
     lewis = Person("lewis", "m", 3)
     braydon = Person("braydon", "m", 3)
@@ -34,26 +43,17 @@ if __name__ == '__main__':
     mel = Person("mel", "f", 3)
     michael = Person("michael", "m", 2)
     sarah = Person("sarah", "f", 1)
-    # kaelyn = Person("kaelyn", "f", 3)
+    kaelyn = Person("kaelyn", "f", 3)
     # nathan = Person("nathan", "m", 1)
-
-    # Add rooms to the house
-    the_house.add_room(king_room)
-    the_house.add_room(queen_room)
-    the_house.add_room(twin_room)
-    the_house.add_room(bunk_room)
-
-    # Add house to calculator
-    test.add_house(the_house)
+    georgia = Person("georgia", "f", 2)
 
     # Add people to the calculator
-    test.add_people([lewis, braydon, tim, jess, daniel, emma, sam, mel, michael, sarah])
-    # test.add_people([lewis, braydon, tim, jess, daniel, emma, sam, mel, michael, sarah, kaelyn, nathan])
-
+    # test.add_people([lewis, braydon, tim, jess, daniel, emma, sam, mel, michael, sarah])
+    test.add_people([lewis, braydon, tim, jess, daniel, emma, sam, mel, michael, sarah, kaelyn, georgia])
 
     # Add partner to a person
-    # kaelyn.add_partner(jess)
-    lewis.add_partner(jess)
+    kaelyn.add_partner(jess)
+    lewis.add_partner(georgia)
 
     # Add bids to a person
     lewis.add_bids({
@@ -116,18 +116,26 @@ if __name__ == '__main__':
         "queen room": 30,
         "king room": 20
     })
-    # kaelyn.add_bids({
-    #     "bunk room": 0,
-    #     "twin room": 0,
-    #     "queen room": 0,
-    #     "king room": 100
-    # })
+    kaelyn.add_bids({
+        "bunk room": 10,
+        "twin room": 10,
+        "queen room": 30,
+        "king room": 50
+    })
     # nathan.add_bids({
     #     "bunk room": 0,
     #     "twin room": 30,
     #     "queen room": 20,
     #     "king room": 50
     # })
+    georgia.add_bids({
+        "bunk room": 20,
+        "twin room": 20,
+        "queen room": 40,
+        "king room": 20
+    })
     test.calculate()
     print(test.best_arrangements)
     print(len(test.best_arrangements))
+    values = list(test.best_arrangements.keys())
+    print(test.get_room_mapping(values[0]))

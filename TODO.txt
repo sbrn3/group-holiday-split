@@ -1,0 +1,9 @@
+# List of things that I need to do
+
+Make it so that couples bid the value of the number of days that they are there cumulatively.
+
+Make it so that if there are multiple options it sorts by gender.
+
+Translate it into names and rooms
+
+Translate it into rooms and prices

@@ -27,7 +27,7 @@ class Person(object):
         """Gender of person"""
         return self._gender
 
-    def days_staying(self):
+    def get_days_staying(self):
         "Number of days the person is staying"
         return self._days_staying
 
@@ -187,11 +187,12 @@ class Calculator(object):
     """Calculates the best permutation of bed selections"""
     _house: House
 
-    def __init__(self, couple_priority=False):
+    def __init__(self, couple_force=False, couple_priority = False):
         """Calculate the best permutation of bed/room assignments. And the prices that everyone has to pay for them"""
         self._people: list = []
         self._highest_utility: int = 0
-        self.best_arrangements: List[List[int]] = []
+        self.best_arrangements: Dict[List[float]: int] = {}
+        self.couple_force = couple_force
         self.couple_priority = couple_priority
 
     def get_house(self):
@@ -238,7 +239,49 @@ class Calculator(object):
                 print(round(count / total, 2))
                 if utility >= self._highest_utility:
                     self._highest_utility = utility
-                    self.best_arrangements.append(arrangement)
+                    self.best_arrangements[str(arrangement)] = utility
+        self.filter_highest_utility()
+
+    def filter_highest_utility(self):
+        """Goes through all the potential best arrangements and only keeps the values with the highest utility"""
+        max_dictionary: Dict[str: int] = {}
+        max_value: float = max(self.best_arrangements.values())
+        for i in self.best_arrangements.keys():
+            if self.best_arrangements[i] == max_value:
+                max_dictionary[i] = max_value
+        self.best_arrangements = max_dictionary
+
+    @staticmethod
+    def string_to_list(n: str) -> List[int]:
+        """Converts a string that used to be a list of integers, back into a list of integers"""
+        n = n.replace(" ", "")
+        n = n.strip("[]")
+        n = n.split(",")
+        n = list(map(int, n))
+        return n
+
+    def get_room_mapping(self, arrangement: List[int]) -> Dict[Person: Room]:
+        """Create a dictionary mapping a person to a room"""
+        if isinstance(arrangement, str):
+            arrangement = self.string_to_list(arrangement)
+        the_map: Dict[Person: Room] = {}
+        for person_index in range(len(arrangement)):
+            person: Person = self.get_people()[person_index]
+            room_index: int = arrangement[person_index] - 1
+            room: Room = self._house.get_rooms()[room_index]
+            the_map[person] = room
+        return the_map
+
+    def get_price_mapping(self, arrangement: List[int]) -> Dict[Person: float]:
+        """Create a dictionary mapping a person to a price"""
+        if isinstance(arrangement, str):
+            arrangement = self.string_to_list(arrangement)
+        the_map: Dict[Person: Room] = {}
+        for person_index in range(len(arrangement)):
+            person: Person = self.get_people()[person_index]
+            room_index: int = arrangement[person_index] - 1
+            room: Room = self._house.get_rooms()[room_index]
+
 
     def get_best_arrangement(self):
         """Returns best arrangement"""
@@ -278,8 +321,8 @@ class Calculator(object):
             if rooms[room].is_gender_restricted():
                 # Find the people assigned to this room
                 indexed_people: List[Person] = self.indexed_people(room + 1, room_indexes)
-                # Couple priority
-                if self.couple_priority:
+                # Couple force
+                if self.couple_force:
                     if indexed_people[0].get_partner() is not None:
                         if not indexed_people[0].is_couple(indexed_people[1]):
                             return False
@@ -290,7 +333,7 @@ class Calculator(object):
                 if indexed_people[0].get_gender() != indexed_people[1].get_gender():
                     return False
             else:
-                if self.couple_priority:
+                if self.couple_force:
                     # couples can only be in gender restricted rooms
                     indexed_people: List[Person] = self.indexed_people(room + 1, room_indexes)
                     for person in indexed_people:
@@ -310,7 +353,18 @@ class Calculator(object):
             room_name: str = room.get_name()
             # How much did they bid on that room
             bid: int = person.get_bids()[room_name]
-            bid *= person.days_staying()
+            bid *= person.get_days_staying()
             # Add to the total utility score
             utility_score += bid
+            # If person has a partner
+            if person.get_partner() is not None and self.couple_priority:
+                # If the partner is in this room
+                partner: Person = person.get_partner()
+                partner_index = self.get_people().index(partner)
+                partner_room_index = arrangement[partner_index] - 1
+                partner_room: Room = self._house.get_rooms()[partner_room_index]
+                if partner_room == room:
+                    partner_bid = partner.get_bids()[room_name]
+                    partner_bid *= partner.get_days_staying()
+                    utility_score += partner_bid
         return utility_score
