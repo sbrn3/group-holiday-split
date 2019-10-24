@@ -70,3 +70,7 @@ Some people will claim that this is too complicated and that you should just spl
 # How to use
 main.py is an example where 10 people were sorted into 4 rooms. There is a couple and people who are staying for 
 different time periods. 
+
+# Example output
+Here is what the output of main.py looks like
+![example output](https://github.com/sbrn3/group-holiday-split/blob/master/media/output.PNG)
