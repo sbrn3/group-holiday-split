@@ -1,7 +1,5 @@
 from classes import *
 if __name__ == '__main__':
-    test = Calculator(couple_force=False, couple_priority=True)
-
     # create all the beds
     bunk_1 = Bed("bunk 1", "single")
     bunk_2 = Bed("bunk 2", "single")
@@ -21,16 +19,13 @@ if __name__ == '__main__':
     king_room = Room("king room", [king])
 
     # Create the house
-    the_house = House(547, 3)
+    the_house = House(1638, 3)
 
     # Add rooms to the house
     the_house.add_room(king_room)
     the_house.add_room(queen_room)
     the_house.add_room(twin_room)
     the_house.add_room(bunk_room)
-
-    # Add house to calculator
-    test.add_house(the_house)
 
     # Create the people and their bids
     lewis = Person("lewis", "m", 3)
@@ -49,7 +44,6 @@ if __name__ == '__main__':
 
     # Add people to the calculator
     # test.add_people([lewis, braydon, tim, jess, daniel, emma, sam, mel, michael, sarah])
-    test.add_people([lewis, braydon, tim, jess, daniel, emma, sam, mel, michael, sarah, kaelyn, georgia])
 
     # Add partner to a person
     kaelyn.add_partner(jess)
@@ -134,8 +128,21 @@ if __name__ == '__main__':
         "queen room": 40,
         "king room": 20
     })
-    test.calculate()
-    print(test.best_arrangements)
-    print(len(test.best_arrangements))
-    values = list(test.best_arrangements.keys())
-    print(test.get_room_mapping(values[0]))
+
+    test = Calculator(couple_force=False, couple_priority=True, price_by="total median")
+
+    # Add people to the calculator
+    test.add_people([lewis, braydon, tim, jess, daniel, emma, sam, mel, michael, sarah, kaelyn, georgia])
+
+    # Add house to calculator
+    test.add_house(the_house)
+
+    # test.calculate()
+    # print(test.best_arrangements)
+    # print(len(test.best_arrangements))
+    arrangement = '[2, 4, 4, 1, 3, 4, 3, 4, 4, 4, 1, 2]'
+    print(test.get_room_mapping(arrangement))
+    payment = test.get_price_mapping(arrangement)
+    print(payment)
+    # aim = 1639
+    print(sum(payment.values()))
