@@ -23,9 +23,9 @@ demand.
 The combination of assigning people to rooms which results in the highest total bids will be the chosen combination. 
 
 e.g. If Sam bids $80 for room 1, $20 for room 2. And Michael bids $20 for room 1 and $80 for room 2. Then in the case 
-where Sam gets room 1 and Michael room 2 the total amount bid is 180. But for the inverse the total amount bid is 
+where Sam gets room 1 and Michael room 2 the total amount bid is 160. But for the inverse, the total amount bid is 
 $40. Therefore the best option is for Sam to get room 1 and Michael to get Room 2. This is then scaled down to have 
-a correct total. So both would end up paying $50 each.
+a correct total($100). So both would end up paying $50 each.
 
 The person who bids the highest on a room is most likely to get that room. If you bid more than other people, then you
 will only have to pay the average that people valued that room. 
@@ -38,7 +38,7 @@ unless they are a couple.
 ### Picking a value
 If you bid too high you will pay too much for that room. If you bid too low you will not get the room. 
 The amount that you should bid should determine how much you value the features of that room. Remember everyone probably
-has different priorities. Some people may prefer having nice views, having an en suite, bigger bed. Therefore you can
+has different priorities. Different people may prefer having nice views, having an en suite or having a bigger bed. Therefore you can
 price each of those things based on how important it is to you. 
 
 ### Sharing a room with a friend
@@ -55,17 +55,18 @@ willing to pay to leave a good room empty, then it is up to you.
 
 ### Playing it cheap
 So what if you don't care where you sleep as long as you get the absolute cheapest option? Well you have to value 
-the popular rooms lower than everyone else (so that you don't win them) but that means that you will have to increase 
+the popular rooms lower than everyone else (so that you don't win them), but that means that you will have to increase 
 your value on a lower popularity rule to have the correct total cost across rooms. Actually the cheapest way is to 
 bid as high as possible on the popular rooms but to only slightly lose. 
 
-e.g. If Sam wants to have a really cheep room. Therefore if Michael bids $80 on room 1 and $20 on room 2, then Sam 
-should bid $79 on room 1 and $21 on room 2. Slightly losing the bid for room 1 and thus securing a low bid for room 2. 
+e.g. Sam wants to have a really cheep room. Therefore if Michael bids $80 on room 1 and $20 on room 2, then Sam 
+should bid $79 on room 1 and $21 on room 2. Slightly losing the bid for room 1 and securing a low bid for room 2. 
 
-You are probably better off just bidding normally instead of trying to game the system.  
+You are probably better off just bidding normally instead of trying to game the system because it is difficult to know how exactly 
+other people will bid.   
 
 ### Even split 
-Some people will claim that this is too complicated and that you should just split the costs evenly between everyone. And whoever ends up in whichever room doesn't matter. It's a holiday after all. Well if that is the case then these people can bid on every room evenly beacuse they believe all the rooms have equal value. The reality is though, most rational people will realise pretty quickly that the rooms are probably not of equal value. So... they will then decide to bid based on how they actually feel. The benefit of this is that if you just split the costs evenly the winners will be the best arguers. 
+Some people will claim that this is too complicated and that you should just split the costs evenly between everyone. And whoever ends up in whichever room doesn't matter. It's a holiday after all. Well if that is the case then these people can bid on every room evenly beacuse they believe all the rooms have equal value. The reality is though, most rational people will realise pretty quickly that the rooms are probably not of equal value. So... they will then decide to bid based on how they actually feel. 
 
 # How to use
 main.py is an example where 10 people were sorted into 4 rooms. There is a couple and people who are staying for 
