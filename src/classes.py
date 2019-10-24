@@ -187,8 +187,8 @@ class Calculator(object):
     """Calculates the best permutation of bed selections"""
     house: House
 
-    def __init__(self, couple_force=False, couple_priority = False,
-                 price_by = "room"):
+    def __init__(self, couple_force=False, couple_priority=False,
+                 price_by="room"):
         """Calculate the best permutation of bed/room assignments. And the prices that everyone has to pay for them
 
         :param price_by can be either 'room' or 'individual' """
@@ -395,6 +395,17 @@ class Calculator(object):
             room_bids.append(self.median(individual_bids))
         return room_bids
 
+    def room_median(self, arrangement: List[int]):
+        """Calculates the median value bid of everyone in the same room"""
+        room_bids = []
+        for i, room in enumerate(self.get_house().get_rooms()):
+            index_people: List[Person] = self.indexed_people(i + 1, arrangement)
+            individual_bids = []
+            for person in index_people:
+                individual_bids.append(person.get_bids()[room.get_name()])
+            room_bids.append(self.median(individual_bids))
+        return room_bids
+
     def get_price_mapping(self, arrangement: List[int]):
         """Create a dictionary mapping a person to a price"""
         if isinstance(arrangement, str):
@@ -428,6 +439,8 @@ class Calculator(object):
                 room_bids = self.total_average()
             elif self.price_by == "total median":
                 room_bids = self.total_median()
+            elif self.price_by == "room median":
+                room_bids = self.room_median(arrangement)
 
             # value of each individual is room average multiplied by the number of nights they are staying
             individual_bids: List[float] = []

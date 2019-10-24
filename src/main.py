@@ -129,7 +129,7 @@ if __name__ == '__main__':
         "king room": 20
     })
 
-    test = Calculator(couple_force=False, couple_priority=True, price_by="total median")
+    test = Calculator(couple_force=False, couple_priority=True, price_by="total average")
 
     # Add people to the calculator
     test.add_people([lewis, braydon, tim, jess, daniel, emma, sam, mel, michael, sarah, kaelyn, georgia])
@@ -137,10 +137,11 @@ if __name__ == '__main__':
     # Add house to calculator
     test.add_house(the_house)
 
-    # test.calculate()
-    # print(test.best_arrangements)
-    # print(len(test.best_arrangements))
-    arrangement = '[2, 4, 4, 1, 3, 4, 3, 4, 4, 4, 1, 2]'
+    test.calculate()
+    print(test.best_arrangements)
+    print(len(test.best_arrangements))
+    # arrangement = '[2, 4, 4, 1, 3, 4, 3, 4, 4, 4, 1, 2]'
+    arrangement = test.best_arrangements[0]
     print(test.get_room_mapping(arrangement))
     payment = test.get_price_mapping(arrangement)
     print(payment)
