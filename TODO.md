@@ -9,4 +9,4 @@ http://procaccia.info/papers/rent.pdf
 
 - Redesign to base pricing on how much extra you would pay to have your preference of room
 
-- Add a hyperparameter of 'temperature' to describe how different the measurements are from each other. 
+- Add a hyperparameter of 'temperature' to describe how different prices are from each other. Some people will not like paying more than 4x other people (even if they bid that way originally). 
