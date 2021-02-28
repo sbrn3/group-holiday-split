@@ -6,7 +6,7 @@ class Person(object):
     """A person that is going on the trip"""
     _name: str
 
-    def __init__(self, name: str, gender: str, days_staying: int):
+    def __init__(self, name: str, gender: str = "hello", days_staying: int = 1):
         """A person that will be there during the holiday
         :type name: str
         :param name: Name of person
@@ -153,7 +153,7 @@ class Room:
 class House:
     """House with beds"""
 
-    def __init__(self, price: float, nights: int):
+    def __init__(self, price: float, nights: int = 1):
         """House that you are staying in. Has beds and a price
         :param price: Total price of accomodation
         :param nights: Number of nights you are staying at accomodation
@@ -188,7 +188,7 @@ class Calculator(object):
     house: House
 
     def __init__(self, couple_force=False, couple_priority=False,
-                 price_by="room"):
+                 price_by:str = "individual"):
         """Calculate the best permutation of bed/room assignments. And the prices that everyone has to pay for them
 
         :param price_by can be either 'room' or 'individual' """
@@ -474,3 +474,13 @@ class Calculator(object):
             if room_number == arrangement[i]:
                 indexed_people.append(self.get_people()[i])
         return indexed_people
+
+    def view_results(self):
+        """View the results of the calculation"""
+        print(self.best_arrangements)
+        print(len(self.best_arrangements))
+        arrangement = list(self.best_arrangements.keys())[0]
+        print(self.get_room_mapping(arrangement))
+        payment = self.get_price_mapping(arrangement)
+        print(payment)
+        print(sum(payment.values()))

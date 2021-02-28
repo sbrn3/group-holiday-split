@@ -138,12 +138,4 @@ if __name__ == '__main__':
     test.add_house(the_house)
 
     test.calculate()
-    print(test.best_arrangements)
-    print(len(test.best_arrangements))
-    # arrangement = '[2, 4, 4, 1, 3, 4, 3, 4, 4, 4, 1, 2]'
-    arrangement = list(test.best_arrangements.keys())[0]
-    print(test.get_room_mapping(arrangement))
-    payment = test.get_price_mapping(arrangement)
-    print(payment)
-    # aim = 1639
-    print(sum(payment.values()))
+    test.view_results()
