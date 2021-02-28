@@ -64,7 +64,7 @@ if __name__ == '__main__':
         "room 1": 20,
         "room 2": 20,
         "room 3": 40,
-        "room 4": 20,
+        "room 4": 80,
         "room 5": 20
     })
 

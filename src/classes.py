@@ -28,7 +28,7 @@ class Person(object):
         return self._gender
 
     def get_nights_staying(self):
-        "Number of days the person is staying"
+        """Number of days the person is staying"""
         return self._days_staying
 
     def get_partner(self):
@@ -155,8 +155,8 @@ class House:
 
     def __init__(self, price: float, nights: int = 1):
         """House that you are staying in. Has beds and a price
-        :param price: Total price of accomodation
-        :param nights: Number of nights you are staying at accomodation
+        :param price: Total price of accommodation
+        :param nights: Number of nights you are staying at accommodation
         """
         self._price = price
         self.rooms: List[Room] = []
@@ -188,16 +188,18 @@ class Calculator(object):
     house: House
 
     def __init__(self, couple_force=False, couple_priority=False,
-                 price_by:str = "individual"):
+                 price_by: str = "individual", bid_value: str = "direct"):
         """Calculate the best permutation of bed/room assignments. And the prices that everyone has to pay for them
 
-        :param price_by can be either 'room' or 'individual' """
+        :param price_by can be either 'room' or 'individual'
+        :param bid_value can be either "direct" or "extra" """
         self._people: list = []
         self._highest_utility: int = 0
         self.best_arrangements: Dict[List[float]: int] = {}
         self.couple_force = couple_force
         self.couple_priority = couple_priority
         self.price_by = price_by
+        self.bid_value = bid_value
 
     def get_house(self):
         """"Returns house"""
@@ -231,8 +233,6 @@ class Calculator(object):
         """Calculates the room assignment for every person in the house
 
         In the form of a dictionary which maps {person: room} """
-        answer: Dict[Person: Room] = {}
-
         # Get a list of all possible ways people could be put in rooms
         possible_arrangements: List[tuple] = self.calculate_arrangements()
 
@@ -248,7 +248,7 @@ class Calculator(object):
                 if utility >= self._highest_utility:
                     self._highest_utility = utility
                     self.best_arrangements[str(arrangement)] = utility
-        self.filter_highest_utility()
+        return self.filter_highest_utility()
 
     def filter_highest_utility(self):
         """Goes through all the potential best arrangements and only keeps the values with the highest utility"""
@@ -411,51 +411,42 @@ class Calculator(object):
         if isinstance(arrangement, str):
             arrangement = self.string_to_list(arrangement)
         the_map: Dict[Person: float] = {}
+        room_bids = []
         if self.price_by == "individual":
-            bids: List[int] = []
-            # Calculate the total value of bids
-            for person_index in range(len(arrangement)):
-                person: Person = self.get_people()[person_index]
-                room_index: int = arrangement[person_index] - 1
-                room: Room = self.house.get_rooms()[room_index]
-                bid = person.get_bids()[room.get_name()] * person.get_nights_staying()
-                bids.append(bid)
-            # figure out a scaling factor
-            scale = self.house.get_total_price() / sum(bids)
-            # Calculate individual costs
-            for person_index in range(len(arrangement)):
-                person: Person = self.get_people()[person_index]
-                room_index: int = arrangement[person_index] - 1
-                room: Room = self.house.get_rooms()[room_index]
-                bid = person.get_bids()[room.get_name()] * person.get_nights_staying()
-                bid = round(bid * scale, 0)
-                the_map[person] = bid
-        else:
-            room_bids = []
-            if self.price_by == "room average":
-                # Calculate the average cost per night of each room
-                room_bids = self.room_average(arrangement)
-            elif self.price_by == "total average":
-                room_bids = self.total_average()
-            elif self.price_by == "total median":
-                room_bids = self.total_median()
-            elif self.price_by == "room median":
-                room_bids = self.room_median(arrangement)
-
-            # value of each individual is room average multiplied by the number of nights they are staying
-            individual_bids: List[float] = []
-            for i, person in enumerate(self.get_people()):
-                room_index = arrangement[i] - 1
-                average_room_value = room_bids[room_index]
-                individual_bids.append(average_room_value * person.get_nights_staying())
-            # find the total amount that is now being paid
-            total = sum(individual_bids)
-            # Scale all the people amounts to be proportionate for the total
-            for i, bid in enumerate(individual_bids):
-                individual_bids[i] = bid / total * self.get_house().get_total_price()
-            for i, person in enumerate(self.get_people()):
-                the_map[person] = round(individual_bids[i], 0)
+            # Calculate by how much people actually bid directly
+            room_bids = self.individual(arrangement)
+        if self.price_by == "room average":
+            # Calculate the average cost per night of each room
+            room_bids = self.room_average(arrangement)
+        elif self.price_by == "total average":
+            room_bids = self.total_average()
+        elif self.price_by == "total median":
+            room_bids = self.total_median()
+        elif self.price_by == "room median":
+            room_bids = self.room_median(arrangement)
+        # Scale the room bids depending on the bid by options
         return the_map
+
+    def individual(self, arrangement):
+        bids: List[int] = []
+        # Calculate the total value of bids
+        for person_index in range(len(arrangement)):
+            person: Person = self.get_people()[person_index]
+            room_index: int = arrangement[person_index] - 1
+            room: Room = self.house.get_rooms()[room_index]
+            bid = person.get_bids()[room.get_name()] * person.get_nights_staying()
+            bids.append(bid)
+        # Calculate individual costs
+        for person_index in range(len(arrangement)):
+            # Get the first person
+            person: Person = self.get_people()[person_index]
+            room_index: int = arrangement[person_index] - 1
+            room: Room = self.house.get_rooms()[room_index]
+            # What is the persons bid for their assigned room
+            bid = person.get_bids()[room.get_name()] * person.get_nights_staying()
+            bids[person_index] = bid
+        return(bids)
+
 
     def get_best_arrangement(self):
         """Returns best arrangement"""
@@ -477,10 +468,12 @@ class Calculator(object):
 
     def view_results(self):
         """View the results of the calculation"""
-        print(self.best_arrangements)
-        print(len(self.best_arrangements))
+        # print(self.best_arrangements)
+        # print(len(self.best_arrangements))
+        print("Room assignment: ")
         arrangement = list(self.best_arrangements.keys())[0]
         print(self.get_room_mapping(arrangement))
+        print("Prices assigned per person: ")
         payment = self.get_price_mapping(arrangement)
         print(payment)
-        print(sum(payment.values()))
+        print("Total amount paid per week is ${0}".format(sum(payment.values())))
