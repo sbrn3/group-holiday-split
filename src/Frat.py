@@ -29,7 +29,7 @@ if __name__ == '__main__':
     Tom = Person("Tom")
     Schubert = Person("Schubert")
     Jack = Person("Jack")
-    Watt = Person("Watt")
+    Watson = Person("Watt")
 
     # Add bids to a person
     Tim.add_bids({
@@ -47,7 +47,7 @@ if __name__ == '__main__':
         "room 5": 20
     })
     Schubert.add_bids({
-        "room 1": 20,
+        "room 1": -20,
         "room 2": 20,
         "room 3": 40,
         "room 4": 20,
@@ -60,7 +60,7 @@ if __name__ == '__main__':
         "room 4": 20,
         "room 5": 20
     })
-    Watt.add_bids({
+    Watson.add_bids({
         "room 1": 20,
         "room 2": 20,
         "room 3": 40,
@@ -68,10 +68,10 @@ if __name__ == '__main__':
         "room 5": 20
     })
 
-    test = Calculator(price_by="individual")
+    test = Calculator(price_by="total average", bid_value="extra")
 
     # Add people to the calculator
-    test.add_people([Tim, Tom, Jack, Schubert, Watt])
+    test.add_people([Tim, Tom, Jack, Schubert, Watson])
 
     # Add house to calculator
     test.add_house(the_house)

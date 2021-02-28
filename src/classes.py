@@ -415,7 +415,7 @@ class Calculator(object):
         if self.price_by == "individual":
             # Calculate by how much people actually bid directly
             room_bids = self.individual(arrangement)
-        if self.price_by == "room average":
+        elif self.price_by == "room average":
             # Calculate the average cost per night of each room
             room_bids = self.room_average(arrangement)
         elif self.price_by == "total average":
@@ -424,7 +424,27 @@ class Calculator(object):
             room_bids = self.total_median()
         elif self.price_by == "room median":
             room_bids = self.room_median(arrangement)
+        else:
+            raise ValueError
         # Scale the room bids depending on the bid by options
+        original = room_bids
+        if self.bid_value == "extra":
+            equal_bids = [self.house.get_total_price()/len(room_bids)] * len(room_bids)
+            room_bids = [x + y for x, y in zip(equal_bids, room_bids)]
+        scale = self.house.get_total_price() / sum(room_bids)
+        scaled_room_bids = [i * scale for i in room_bids]
+        # Dictionary matching rooms to prices
+        room_prices = {}
+        for i, room in enumerate(self.get_house().get_rooms()):
+            room_prices[room] = scaled_room_bids[i]
+        # Create dictionary matching prices to people
+        for i, person in enumerate(self.get_people()):
+            # What is their assigned room?
+            their_room_map = self.get_room_mapping(arrangement)
+            their_room = their_room_map[person]
+            # What is the value of that room
+            the_map[person] = round(room_prices[their_room])
+        test = sum(the_map.values())
         return the_map
 
     def individual(self, arrangement):
